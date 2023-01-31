@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">VkTestCase</string>
+    <string name="add_button">add button</string>
 </resources>
