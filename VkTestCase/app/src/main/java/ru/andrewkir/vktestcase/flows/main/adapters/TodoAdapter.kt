@@ -40,12 +40,13 @@ class TodoAdapter(
         return ViewHolder(view)
     }
 
-    @SuppressLint("SimpleDateFormat", "SetTextI18n", "UseCompatLoadingForDrawables")
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.run {
             text.text = dataSet[position].text
             checkbox.isChecked = dataSet[position].isCompleted ?: false
             val str = dataSet[position].text
+            val id = dataSet[position].id
             if (dataSet[position].isCompleted == true) {
                 val textString = SpannableString(text.text)
                 textString.setSpan(StrikethroughSpan(), 0, textString.length, 0)
@@ -57,7 +58,7 @@ class TodoAdapter(
             checkbox.setOnCheckedChangeListener { _, _ ->
                 onCheckListener.invoke(
                     TodoModel(
-                        id = dataSet[position].id,
+                        id = id,
                         text = str,
                         isCompleted = checkbox.isChecked
                     )
