@@ -20,6 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import ru.andrewkir.domain.repositories.MainRepository
 import ru.andrewkir.vktestcase.App
 import ru.andrewkir.vktestcase.R
 import ru.andrewkir.vktestcase.common.BaseFragment
@@ -28,7 +29,7 @@ import ru.andrewkir.vktestcase.databinding.FragmentMainBinding
 import ru.andrewkir.vktestcase.flows.main.adapters.TodoAdapter
 import javax.inject.Inject
 
-class MainFragment : BaseFragment<MainViewModel, MainRepository, FragmentMainBinding>() {
+class MainFragment : BaseFragment<MainViewModel, FragmentMainBinding>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -48,9 +49,9 @@ class MainFragment : BaseFragment<MainViewModel, MainRepository, FragmentMainBin
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = TodoAdapter(emptyList()) {
-            viewModel.removeItem(it)
-        }
+        adapter = TodoAdapter(emptyList(), { viewModel.removeItem(it) }, {
+            viewModel.updateItem(it)
+        })
         bind.recyclerView.adapter = adapter
         bind.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 

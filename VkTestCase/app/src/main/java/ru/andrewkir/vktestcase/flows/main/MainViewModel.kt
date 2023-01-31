@@ -1,12 +1,12 @@
 package ru.andrewkir.vktestcase.flows.main
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.andrewkir.vktestcase.common.BaseViewModel
-import ru.andrewkir.vktestcase.flows.main.model.TodoModel
+import ru.andrewkir.domain.models.TodoModel
+import ru.andrewkir.domain.repositories.MainRepository
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val repository: MainRepository) : BaseViewModel(
@@ -19,7 +19,7 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
 
     private fun getData() {
         viewModelScope.launch {
-            mTodoData = repository.getData()
+            mTodoData = repository.getTODOList() as MutableList<TodoModel>
             _todoData.emit(mTodoData)
         }
     }
@@ -27,16 +27,25 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
     fun removeItem(item: TodoModel) {
         mTodoData.remove(item)
         viewModelScope.launch {
+            repository.removeItem(item)
+            mTodoData = repository.getTODOList() as MutableList<TodoModel>
             _todoData.emit(mTodoData)
         }
     }
 
     fun addItem(text: String) {
-        mTodoData.add(TodoModel(text))
         viewModelScope.launch {
-            val newList = mutableListOf<TodoModel>()
-            newList.addAll(mTodoData)
-            _todoData.emit(newList)
+            repository.addItem(TodoModel(text = text))
+            mTodoData = repository.getTODOList() as MutableList<TodoModel>
+            _todoData.emit(mTodoData)
+        }
+    }
+
+    fun updateItem(item: TodoModel){
+        viewModelScope.launch {
+            repository.updateItem(item)
+            mTodoData = repository.getTODOList() as MutableList<TodoModel>
+            _todoData.emit(mTodoData)
         }
     }
 

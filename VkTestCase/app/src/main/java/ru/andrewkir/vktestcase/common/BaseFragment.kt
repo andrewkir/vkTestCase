@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import javax.inject.Inject
 
 
-abstract class BaseFragment<viewModel : BaseViewModel, repo : BaseRepository, viewBinding : ViewBinding> :
+abstract class BaseFragment<viewModel : BaseViewModel, viewBinding : ViewBinding> :
     Fragment() {
 
     protected lateinit var bind: viewBinding

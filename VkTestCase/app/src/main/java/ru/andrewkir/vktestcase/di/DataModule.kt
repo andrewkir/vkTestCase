@@ -1,13 +1,13 @@
 package ru.andrewkir.vktestcase.di
 
-import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import ru.andrewkir.vktestcase.flows.main.MainRepository
+import ru.andrewkir.data.repositories.MainRepositoryImpl
+import ru.andrewkir.domain.repositories.MainRepository
 
 @Module
-class DataModule {
-    @Provides
-    fun provideMainRepository(): MainRepository =
-        MainRepository()
+abstract class DataModule {
+    @Binds
+    abstract fun provideMainRepository(mainRepository: MainRepositoryImpl): MainRepository
 }

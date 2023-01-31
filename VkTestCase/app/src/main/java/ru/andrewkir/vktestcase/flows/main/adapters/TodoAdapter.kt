@@ -1,7 +1,6 @@
 package ru.andrewkir.vktestcase.flows.main.adapters
 
 import android.annotation.SuppressLint
-import android.graphics.Paint
 import android.text.SpannableString
 import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
@@ -12,13 +11,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.andrewkir.vktestcase.R
-import ru.andrewkir.vktestcase.flows.main.model.TodoModel
+import ru.andrewkir.domain.models.TodoModel
 import java.util.*
 
 
 class TodoAdapter(
     private var dataSet: List<TodoModel>,
-    private val listener: (TodoModel) -> Unit
+    private val listener: (TodoModel) -> Unit,
+    private val onCheckListener: (TodoModel) -> Unit
 ) :
     RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
 
@@ -55,12 +55,18 @@ class TodoAdapter(
             }
 
             checkbox.setOnCheckedChangeListener { _, _ ->
-                if (checkbox.isChecked){
+                onCheckListener.invoke(
+                    TodoModel(
+                        id = dataSet[position].id,
+                        text = str,
+                        isCompleted = checkbox.isChecked
+                    )
+                )
+                if (checkbox.isChecked) {
                     val textString = SpannableString(text.text)
                     textString.setSpan(StrikethroughSpan(), 0, textString.length, 0)
                     text.text = textString
-                }
-                else text.text = str
+                } else text.text = str
             }
 
             deleteButton.setOnClickListener {
