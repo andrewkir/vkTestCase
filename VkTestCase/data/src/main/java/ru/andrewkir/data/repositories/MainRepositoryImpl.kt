@@ -16,7 +16,7 @@ class MainRepositoryImpl @Inject constructor(private val todoModelDao: TodoModel
     override fun addItem(item: TodoModel) {
         todoModelDao.addItem(
             TodoEntity(
-                UUID.randomUUID().toString(),
+                item.id,
                 item.text ?: "",
                 item.isCompleted ?: false
             )
